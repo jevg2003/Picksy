@@ -1,11 +1,14 @@
+---
+import "/src/styles/global.css";
+const {title = "Picksy"} = Astro.props
+---
 <!doctype html>
-<html lang="en">
+<html lang="es" class="scroll-smooth">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+		<link rel="icon" type="image/svg+xml" href="/Logo.svg" />
+		<title>{title}</title>
 	</head>
 	<body>
 		<slot />
