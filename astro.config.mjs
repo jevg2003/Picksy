@@ -9,4 +9,6 @@ export default defineConfig({
   vite: {
       plugins: [tailwindcss()],
     },
+    site: 'https://jevg2003.github.io',
+    base: 'Picksy',
 });
