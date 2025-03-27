@@ -47,12 +47,12 @@ export default function Hero() {
         </Swiper>
 
         {/* Botones de navegación personalizados */}
-        <button className="custom-prev absolute top-1/2 left-4 transform -translate-y-1/2 z-10 bg-black/50 bg-opacity-50 p-2 rounded-full text-blue-300 hover:bg-black/80 hover:bg-opacity-70">
+        <button className="custom-prev absolute top-1/2 left-4 transform -translate-y-1/2 z-10 bg-black/50 p-2 rounded-full text-blue-300 hover:bg-black/80 cursor-pointer">
           <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
             <polyline points="15 18 9 12 15 6" />
           </svg>
         </button>
-        <button className="custom-next absolute top-1/2 right-4 transform -translate-y-1/2 z-10 bg-black/50 bg-opacity-50 p-2 rounded-full text-blue-300 hover:bg-black/80 hover:bg-opacity-70">
+        <button className="custom-next absolute top-1/2 right-4 transform -translate-y-1/2 z-10 bg-black/50 p-2 rounded-full text-blue-300 hover:bg-black/80 cursor-pointer">
           <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
             <polyline points="9 18 15 12 9 6" />
           </svg>
