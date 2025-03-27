@@ -9,7 +9,7 @@ export default function Navbar() {
       <nav className={`p-4 shadow-md flex justify-between items-center fixed top-0 left-0 w-full z-50 ${darkMode ? "bg-gray-900 text-white" : "bg-white text-gray-900"}`}>
         {/* Logo */}
         <a href="">
-          <img src="/IMG/PICKSYName.svg" alt="Logo de la empresa Picksy" className="h-10 w-auto mr-2" />
+          <img src="./public/IMG/PICKSYName.svg" alt="Logo de la empresa Picksy" className="h-10 w-auto mr-2" />
         </a>
 
         {/* Search Bar */}
