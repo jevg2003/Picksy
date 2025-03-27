@@ -4,21 +4,20 @@ import Feature from './Feature'; // Asegúrate de que la ruta es correcta
 export default function Products() {
   const [selectedProduct, setSelectedProduct] = useState(null);
 
-  const products = [
-    { id: 1, name: 'Producto 1', price: '$100', img: './IMG/aguacate.jpg', images: ['./IMG/aguacate.jpg', './IMG/aguacate2.jpg'] },
-    { id: 2, name: 'Producto 2', price: '$150', img: './IMG/aguacate.jpg', images: ['./IMG/aguacate.jpg', './IMG/aguacate2.jpg'] },
-    { id: 3, name: 'Producto 3', price: '$200', img: './IMG/aguacate.jpg', images: ['./IMG/aguacate.jpg', './IMG/aguacate2.jpg'] },
-    { id: 4, name: 'Producto 4', price: '$250', img: './IMG/aguacate.jpg', images: ['./IMG/aguacate.jpg', './IMG/aguacate2.jpg'] },
-    { id: 5, name: 'Producto 5', price: '$100', img: './IMG/aguacate.jpg', images: ['./IMG/aguacate.jpg', './IMG/aguacate2.jpg'] },
-    { id: 6, name: 'Producto 6', price: '$100', img: './IMG/aguacate.jpg', images: ['./IMG/aguacate.jpg', './IMG/aguacate2.jpg'] },
-    { id: 7, name: 'Producto 7', price: '$150', img: './IMG/aguacate.jpg', images: ['./IMG/aguacate.jpg', './IMG/aguacate2.jpg'] },
-    { id: 8, name: 'Producto 8', price: '$150', img: './IMG/aguacate.jpg', images: ['./IMG/aguacate.jpg', './IMG/aguacate2.jpg'] },
-    { id: 9, name: 'Producto 9', price: '$150', img: './IMG/aguacate.jpg', images: ['./IMG/aguacate.jpg', './IMG/aguacate2.jpg'] },
-    { id: 10, name: 'Producto 10', price: '$150', img: './IMG/aguacate.jpg', images: ['./IMG/aguacate.jpg', './IMG/aguacate2.jpg'] },
-    { id: 11, name: 'Producto 11', price: '$150', img: './IMG/aguacate.jpg', images: ['./IMG/aguacate.jpg', './IMG/aguacate2.jpg'] },
-    { id: 12, name: 'Producto 12', price: '$150', img: './IMG/aguacate.jpg', images: ['./IMG/aguacate.jpg', './IMG/aguacate2.jpg'] },
-  ];
-
+const products = [
+            { id: 1, name: 'Aguacate', price: '$100', img: './IMG/aguacate.jpg', images: ['./IMG/aguacate.jpg', './IMG/aguacate.jpg'] },
+            { id: 2, name: 'Manzana', price: '$50', img: './IMG/aguacate.jpg', images: ['./IMG/aguacate.jpg', './IMG/aguacate.jpg'] },
+            { id: 3, name: 'Plátano', price: '$30', img: './IMG/aguacate.jpg', images: ['./IMG/aguacate.jpg', './IMG/aguacate.jpg'] },
+            { id: 4, name: 'Naranja', price: '$40', img: './IMG/aguacate.jpg', images: ['./IMG/aguacate.jpg', './IMG/aguacate.jpg'] },
+            { id: 5, name: 'Fresa', price: '$60', img: './IMG/aguacate.jpg', images: ['./IMG/aguacate.jpg', './IMG/aguacate.jpg'] },
+            { id: 6, name: 'Uvas', price: '$70', img: './IMG/aguacate.jpg', images: ['./IMG/aguacate.jpg', './IMG/aguacate.jpg'] },
+            { id: 7, name: 'Sandía', price: '$90', img: './IMG/aguacate.jpg', images: ['./IMG/aguacate.jpg', './IMG/aguacate.jpg'] },
+            { id: 8, name: 'Piña', price: '$80', img: './IMG/aguacate.jpg', images: ['./IMG/aguacate.jpg', './IMG/aguacate.jpg'] },
+            { id: 9, name: 'Mango', price: '$85', img: './IMG/aguacate.jpg', images: ['./IMG/aguacate.jpg', './IMG/aguacate.jpg'] },
+            { id: 10, name: 'Pera', price: '$55', img: './IMG/aguacate.jpg', images: ['./IMG/aguacate.jpg', './IMG/aguacate.jpg'] },
+            { id: 11, name: 'Cereza', price: '$95', img: './IMG/aguacate.jpg', images: ['./IMG/aguacate.jpg', './IMG/aguacate.jpg'] },
+            { id: 12, name: 'Melón', price: '$75', img: './IMG/aguacate.jpg', images: ['./IMG/aguacate.jpg', './IMG/aguacate.jpg'] },
+];
   return (
     <section className="py-10 bg-gray-50 w-full">
       <div className="container mx-auto px-4">
