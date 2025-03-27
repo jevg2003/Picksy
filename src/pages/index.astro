@@ -2,21 +2,21 @@
 import Layout from '../layouts/Layout.astro'
 import Hero from '../components/Hero.jsx'
 import Navbar from '../components/Navbar.jsx'
-import Sidebar from '../components/Sidebar.astro'
-import Product from '../components/Product.astro'
-import Feature from '../components/Feature.astro'
+import Sidebar from '../components/Sidebar.jsx'
+import Product from '../components/Product.jsx'
 import Footer from '../components/Footer.astro'	
 ---
 
 <Layout>
 	<Navbar />
 	<div class="flex">
-		<Sidebar />
-		<div class="flex w-[85%] flex-col items-center">
+		<div h-screen>
+			<Sidebar />
+		</div>
+		<div class="flex ml-[15%] w-[85%] flex-col items-center">
 			<Hero client:load/>
-			<Product />
-			<Feature />
+			<Product client:load/>
+			<Footer />
 		</div>
 	</div>
-	<Footer />
 </Layout>
