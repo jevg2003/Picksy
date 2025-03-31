@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function Sidebar() {
   return (
-    <aside className="fixed w-[15%] h-[93.3%] bg-gray-200 text-black flex flex-col">
+    <aside className="fixed w-[15%] h-full bg-gray-200 text-black flex flex-col">
       {/* Sección de redes sociales con fondo diferente */}
       <div className="bg-gray-400 p-4 flex justify-center pt-7 space-x-4">
         {/* Facebook */}
@@ -52,8 +52,8 @@ export default function Sidebar() {
       </div>
       
       {/* Contenido del Sidebar */}
-      <div className="flex-1 overflow-y-auto p-4 scrollbar-custom">
-        <h2 className="text-lg font-bold mb-4 text-gray-700">Categorías</h2>
+      <div className="flex-1 overflow-y-auto p-4 pb-20 scrollbar-custom">
+        <h2 className="text-lg font-bold mb-10 text-gray-700">Categorías</h2>
         <ul className="space-y-2">
           <li className="cursor-pointer hover:text-blue-400">Cocina</li>
           <li className="cursor-pointer hover:text-blue-400">Sala</li>
@@ -166,7 +166,7 @@ export default function Sidebar() {
           <li className="cursor-pointer hover:text-blue-400">Oficina</li>
           <li className="cursor-pointer hover:text-blue-400">Oficina</li>
           <li className="cursor-pointer hover:text-blue-400">Oficina</li>
-          <li className="cursor-pointer hover:text-blue-400">Oficina</li>
+          <li className="cursor-pointer hover:text-blue-400">OfiECECSD</li>
         </ul>
       </div>
     </aside>

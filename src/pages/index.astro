@@ -8,15 +8,22 @@ import Footer from '../components/Footer.astro'
 ---
 
 <Layout>
-	<Navbar />
-	<div class="flex">
-		<div h-screen>
+	<div class="flex flex-col min-h-screen">
+	  <Navbar client:load />
+  
+	  <div class="flex flex-1">
+		<aside class="w-[15%] max-h-screen overflow-y-auto">
 			<Sidebar />
+		</aside>
+
+		<div class="w-[85%] flex flex-col items-center">
+		  <Hero client:load />
+		  <Product client:load />
 		</div>
-		<div class="flex ml-[15%] w-[85%] flex-col items-center">
-			<Hero client:load/>
-			<Product client:load/>
-			<Footer />
-		</div>
+	  </div>
+
+	  <Footer />
 	</div>
-</Layout>
+  </Layout>
+  
+  
