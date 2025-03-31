@@ -1,0 +1,30 @@
+---
+import { getProducts } from "@/services/api/products";
+import { ProductCard } from "./ProductCard";
+const { content: products } = await getProducts();
+---
+
+<section class="py-10 bg-gray-50 w-full">
+  <div class="container mx-auto px-4">
+    <h2 class="text-6xl text-start mb-20">Productos</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+      {
+        products.map(({ id, description, image, price, name, category, isBlock, stock }) => (
+          <ProductCard
+            server:defer
+            client:only="react"
+            id={id}
+            description={description}
+            image={image}
+            price={price}
+            name={name}
+            category={category}
+            isBlock={isBlock}
+            stock={stock}>
+            <span slot="fallback">Cargando...</span>
+          </ProductCard>
+        ))
+      }
+    </div>
+  </div>
+</section>
