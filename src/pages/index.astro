@@ -5,26 +5,28 @@ import Navbar from "../components/Navbar.jsx";
 import Sidebar from "../components/Sidebar.jsx";
 import Products from "@/components/products/Products.astro";
 import Footer from "../components/Footer.astro";
+import SkeletonLoaderProduct from "@/components/loading/SkeletonLoaderProduct.astro";
 
 export const prerender = true;
 ---
 
 <Layout>
-	<div class="flex flex-col min-h-screen">
-	  <Navbar client:load />
-  
-	  <div class="flex flex-1">
-		<aside class="w-[15%] max-h-screen overflow-y-auto">
-			<Sidebar />
-		</aside>
+  <div class="flex flex-col min-h-screen">
+    <Navbar client:load />
 
-		<div class="w-[85%] flex flex-col items-center">
-		  <Hero client:load />
-		  <Products />
-		</div>
-	  </div>
+    <div class="flex flex-1">
+      <aside class="w-[15%] max-h-screen overflow-y-auto">
+        <Sidebar />
+      </aside>
 
-	  <Footer />
-	</div>
-  </Layout>
-  
+      <div class="w-[85%] flex flex-col items-center">
+        <Hero client:load />
+        <Products server:defer>
+          <SkeletonLoaderProduct slot="fallback" />
+        </Products>
+      </div>
+    </div>
+
+    <Footer />
+  </div>
+</Layout>
