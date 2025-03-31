@@ -1,0 +1,22 @@
+---
+
+---
+
+<section class="py-10 bg-gray-50 w-full">
+  <div class="container mx-auto px-4">
+    <h2 class="text-6xl text-start mb-20">Productos</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+      {
+        Array.from({ length: 8 }).map((_, i) => (
+          <div class="bg-white rounded-lg overflow-hidden shadow hover:shadow-lg transition-transform transform hover:scale-105 cursor-pointer p-6">
+            <div class="w-full h-48 bg-gray-300 rounded-md" />
+            <div class="mt-4">
+              <div class="h-4 bg-gray-300 rounded w-3/4 mb-2" />
+              <div class="h-4 bg-gray-300 rounded w-1/2" />
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

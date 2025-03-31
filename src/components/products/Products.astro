@@ -11,7 +11,6 @@ const { content: products } = await getProducts();
       {
         products.map(({ id, description, image, price, name, category, isBlock, stock }) => (
           <ProductCard
-            server:defer
             client:only="react"
             id={id}
             description={description}
@@ -20,9 +19,8 @@ const { content: products } = await getProducts();
             name={name}
             category={category}
             isBlock={isBlock}
-            stock={stock}>
-            <span slot="fallback">Cargando...</span>
-          </ProductCard>
+            stock={stock}
+          />
         ))
       }
     </div>
