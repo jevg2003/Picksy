@@ -1,0 +1,1 @@
+export const API_BASE_URL = "https://platzi-my-store-one.vercel.app/api/v1";
