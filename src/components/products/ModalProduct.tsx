@@ -38,7 +38,7 @@ const ModalProduct: React.FC<ModalProductProps> = ({ product, closeModal }) => {
                   <img
                     src={img}
                     alt={`${product.name} ${index + 1}`}
-                    className="px-auto object-cover"
+                    className="px-auto cover"
                   />
                 </SwiperSlide>
               ))}
