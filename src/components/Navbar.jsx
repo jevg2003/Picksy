@@ -84,7 +84,7 @@ export default function Navbar() {
               className="w-full p-2 pl-10 pr-10 border rounded-full focus:outline-none focus:ring-2 focus:ring-gray-600 dark:focus:ring-gray-400 transition-colors bg-transparent text-gray-900 dark:text-white dark:border-gray-700 dark:placeholder-gray-400 text-lg"
             />
             <Search
-              className="absolute left-3 top-2.5 transition-colors text-gray-500 dark:text-gray-400"
+              className="absolute left-3 top-3.5 transition-colors text-gray-500 dark:text-gray-400"
               size={18}
             />
           </div>
