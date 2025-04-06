@@ -7,22 +7,34 @@ const { content: products } = await getProducts();
 <section class="py-10 w-full">
   <div class="container mx-auto px-4">
     <h2 class="text-6xl text-start mb-20">Productos</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-      {
-        products.map(({ id, description, image, price, name, category, isBlock, stock }) => (
+    {products.length > 0 ? (
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+        {products.map((product) => (
           <ProductCard
             client:only="react"
-            id={id}
-            description={description}
-            image={image}
-            price={price}
-            name={name}
-            category={category}
-            isBlock={isBlock}
-            stock={stock}
+            {...product}
+            imageLink={product.images.find((img) => img.isCover)?.link || ""}
           />
-        ))
-      }
-    </div>
+        ))}
+      </div>
+    ) : (
+      <div class="flex flex-col items-center justify-center h-64 text-center text-gray-500">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-16 w-16 mb-4 text-gray-400"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M9 17v-2a4 4 0 014-4h1a4 4 0 014 4v2m-7 4h6m-3-4v4m-6-4a4 4 0 00-4-4H5a4 4 0 00-4 4v2m7 4h6m-3-4v4"
+          />
+        </svg>
+        <p class="text-lg font-semibold">No hay productos disponibles</p>
+      </div>
+    )}
   </div>
 </section>
