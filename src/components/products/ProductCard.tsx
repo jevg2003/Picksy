@@ -4,17 +4,24 @@ import { useState } from "react";
 import ModalProduct from "./ModalProduct";
 import type { Product } from "@/types/api/product";
 
-interface ProductCardProps extends Product {}
+interface ProductCardProps extends Product {
+  imageLink: string;
+}
 
 export const ProductCard: React.FC<ProductCardProps> = ({
   id,
-  name,
   description,
-  image,
   price,
+  images,
+  imageLink,
+  name,
   category,
-  isBlock,
   stock,
+  discount,
+  characteristics,
+  enabled,
+  createdAt,
+  updatedAt,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -27,7 +34,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         className="bg-white rounded-lg overflow-hidden shadow hover:shadow-lg transition-transform transform hover:scale-105 cursor-pointer p-6"
         onClick={openModal}>
         {/* Imagen del producto */}
-        <img src={image} alt={description} className="w-full h-48 object-contain" />
+        <img src={imageLink} alt={description} className="w-full h-48 object-contain" />
         {/* Información del producto */}
         <div className="p-4 bg-white">
           <h3 className="text-lg font-semibold">{name}</h3>
@@ -42,7 +49,20 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       </div>
       {isModalOpen && (
         <ModalProduct
-          product={{ id, name, description, image, price, category, isBlock, stock }}
+          product={{
+            id,
+            name,
+            description,
+            images,
+            price,
+            category,
+            stock,
+            discount,
+            characteristics,
+            enabled,
+            createdAt,
+            updatedAt,
+          }}
           closeModal={closeModal}
         />
       )}

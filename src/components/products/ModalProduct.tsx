@@ -1,10 +1,10 @@
 import React from "react";
-import type { Product } from "@/types/api/product";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import type { Product } from "@/types/api/product";
 
 interface ModalProductProps {
   product: Product;
@@ -30,18 +30,15 @@ const ModalProduct: React.FC<ModalProductProps> = ({ product, closeModal }) => {
             navigation
             pagination={{ clickable: true }}
             className="w-full h-full">
-            {Array(2)
-              .fill(product.image)
-              .flat()
-              .map((img, index) => (
-                <SwiperSlide key={index} className="w-full h-full">
-                  <img
-                    src={img}
-                    alt={`${product.name} ${index + 1}`}
-                    className="px-auto cover"
-                  />
-                </SwiperSlide>
-              ))}
+            {product.images.map((img, index) => (
+              <SwiperSlide key={index} className="w-full h-full">
+                <img
+                  src={img.link}
+                  alt={`${product.name} ${index + 1}`}
+                  className="px-auto cover"
+                />
+              </SwiperSlide>
+            ))}
           </Swiper>
         </div>
 

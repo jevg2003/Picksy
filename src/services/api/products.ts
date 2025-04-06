@@ -1,15 +1,20 @@
-import { API_BASE_URL } from "./index";
 import type { ProductResponse } from "@/types/api/product";
+import { queryApi } from ".";
 
-export const getProducts = async (): Promise<ProductResponse> => {
-  const response = await fetch(`${API_BASE_URL}/products`, {
-    method: "GET",
-  });
+export type QueryParams = {
+  page?: number;
+  size?: number;
+  order?: "asc" | "desc";
+  sort?: "name" | "price" | "stock";
+  minPrice?: number;
+  maxPrice?: number;
+  search?: string;
+};
+export const getProducts = async (queryParams?: QueryParams): Promise<ProductResponse> => {
+  const queryString = new URLSearchParams(queryParams as Record<string, string>).toString();
+  const url = `/products${queryString ? `?${queryString}` : ""}`;
 
-  if (!response.ok) {
-    throw new Error(`${response.status} Error al obtener productos: ${response.statusText}`);
-  }
+  const data: ProductResponse = await queryApi(url, { method: "GET" });
 
-  const data: ProductResponse = await response.json();
   return data;
 };
