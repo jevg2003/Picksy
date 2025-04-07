@@ -1,0 +1,83 @@
+---
+interface FormInputProps {
+  id: string;
+  label: string;
+  type: "text" | "email" | "password" | "number" | "textarea" | "select" | "checkbox";
+  required?: boolean;
+  placeholder?: string;
+  value?: string | number;
+  checked?: boolean;
+  options?: string[];
+}
+
+const {
+  id,
+  label,
+  type,
+  required = false,
+  placeholder = "",
+  value = "",
+  checked,
+  options,
+} = Astro.props as FormInputProps;
+---
+
+<div class="mb-4">
+  <label 
+    for={id} 
+    class={`block text-sm font-medium text-gray-700 dark:text-gray-300 ${
+      type === 'checkbox' ? 'flex items-center gap-2 cursor-pointer' : ''
+    }`}
+  >
+    {type === 'checkbox' && (
+      <input
+        id={id}
+        name={id}
+        type="checkbox"
+        required={required}
+        checked={checked}
+        class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer
+          checked:bg-indigo-600 checked:border-transparent
+          transition-colors duration-200
+          focus:outline-none focus:ring-2 focus:ring-offset-2
+          dark:border-gray-600 dark:bg-gray-700
+          dark:checked:bg-indigo-500 dark:focus:ring-offset-gray-800"
+      />
+    )}
+    {label}
+    {required ? <span class="text-red-500">*</span> : null}
+  </label>
+  
+  {type !== 'checkbox' && (
+    type === "textarea" ? (
+      <textarea
+        id={id}
+        name={id}
+        required={required}
+        placeholder={placeholder}
+        class="px-4 py-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+        {value}
+      </textarea>
+    ) : type === "select" ? (
+      <select
+        id={id}
+        name={id}
+        required={required}
+        class="px-4 py-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+        {options?.map((option) => (
+          <option value={option}>{option}</option>
+        ))}
+      </select>
+    ) : (
+      <input
+        id={id}
+        name={id}
+        type={type}
+        required={required}
+        placeholder={placeholder}
+        value={value}
+        class="px-4 py-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+      />
+    )
+  )}
+</div>

@@ -1,0 +1,159 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import FormInput from "@/pages/insert/FormInput.astro";
+import FormImageInput from "@/pages/insert/FormImageInput.astro";
+---
+
+<Layout title="Insert & Update">
+  <div
+    class="flex flex-col items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900 space-y-12">
+    <!-- Sección de Insertar -->
+    <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 w-full max-w-md">
+      <h1 class="text-2xl font-bold text-center text-gray-800 dark:text-white">Insertar</h1>
+      <p class="text-gray-600 dark:text-gray-400 mt-2 text-center">
+        ¡Bienvenido a la página de inserción!
+      </p>
+      <form id="insertForm" class="space-y-4">
+        <FormInput id="name" label="Name" type="text" required />
+        <FormInput id="price" label="Price" type="number" required />
+        <FormInput id="description" label="Description" type="textarea" required />
+        <FormInput id="categoryId" label="Category ID" type="text" required />
+        <FormInput id="stock" label="Stock" type="number" />
+        <FormInput id="discount" label="Discount" type="number" />
+        <FormInput id="characteristics" label="Characteristics" type="textarea" />
+        <FormInput id="coverImageIndex" label="Cover Image Index" type="number" />
+        <FormInput id="enabled" label="Enabled" type="checkbox" />
+        <FormImageInput id="productImages" label="Imágenes del producto" />
+        <button
+          type="submit"
+          class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+          Submit
+        </button>
+      </form>
+    </div>
+
+    <!-- Sección de Actualizar -->
+    <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 w-full max-w-md">
+      <h1 class="text-2xl font-bold text-center text-gray-800 dark:text-white">Actualizar</h1>
+      <p class="text-gray-600 dark:text-gray-400 mt-2 text-center">
+        ¡Actualiza un producto existente!
+      </p>
+      <form id="updateForm" class="space-y-4">
+        <FormInput id="update-name" label="Name" type="text" />
+        <FormInput id="update-price" label="Price" type="number" />
+        <FormInput id="update-description" label="Description" type="textarea" />
+        <FormInput id="update-categoryId" label="Category ID" type="text" />
+        <FormInput id="update-stock" label="Stock" type="number" />
+        <FormInput id="update-discount" label="Discount" type="number" />
+        <FormInput id="update-characteristics" label="Characteristics" type="textarea" />
+        <FormInput id="update-coverImageId" label="Cover Image ID" type="number" />
+        <FormInput id="update-coverImageIndex" label="Cover Image Index" type="number" />
+        <FormInput id="update-enabled" label="Enabled" type="checkbox" />
+        <FormInput
+          id="update-imagesToRemove"
+          label="Images to Remove (IDs)"
+          type="text"
+          placeholder="Comma-separated IDs (e.g., 1,2,3)"
+        />
+        <FormImageInput id="updateProductImages" label="Imágenes del producto" />
+        <button
+          type="submit"
+          class="w-full bg-blue-600 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+          Update
+        </button>
+      </form>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  function handleImageInput(input: HTMLInputElement, previewId: string) {
+    const maxFiles = 5;
+    const previewContainer = document.getElementById(previewId);
+    
+    input.addEventListener('change', () => {
+      if (!previewContainer) return;
+      previewContainer.innerHTML = '';
+      
+      const files = Array.from(input.files || []);
+      if (files.length > maxFiles) {
+        alert(`Por favor, seleccione máximo ${maxFiles} imágenes`);
+        input.value = '';
+        return;
+      }
+
+      files.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = document.createElement('img');
+          img.src = e.target?.result as string;
+          img.classList.add('w-full', 'h-24', 'object-cover', 'rounded');
+          previewContainer.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+  }
+
+  // Configurar visualización de imágenes para ambos formularios
+  handleImageInput(
+    document.querySelector('#productImages') as HTMLInputElement,
+    'productImages-preview'
+  );
+  handleImageInput(
+    document.querySelector('#updateProductImages') as HTMLInputElement,
+    'updateProductImages-preview'
+  );
+
+  // Modificar los manejadores de formularios existentes
+  const insertForm = document.getElementById("insertForm") as HTMLFormElement;
+  if (insertForm) {
+    insertForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const formData = new FormData(insertForm);
+      const data: Record<string, any> = {};
+      const imageFiles = formData.getAll('productImages');
+
+      formData.forEach((value, key) => {
+        if (key === 'enabled') {
+          data[key] = value === 'on';
+        } else if (key !== 'productImages') {
+          data[key] = value;
+        }
+      });
+
+      data.images = imageFiles;
+      console.log("Datos del formulario de inserción:", data);
+      console.log("Archivos de imagen:", imageFiles);
+    });
+  }
+
+  const updateForm = document.getElementById("updateForm") as HTMLFormElement;
+  if (updateForm) {
+    updateForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const formData = new FormData(updateForm);
+      const data: Record<string, any> = {};
+      const imageFiles = formData.getAll('updateProductImages');
+
+      formData.forEach((value, key) => {
+        if (key === 'enabled') {
+          data[key] = value === 'on';
+        } else if (key === 'imagesToRemove') {
+          const stringValue = value.toString();
+          data[key] = stringValue
+            ? stringValue.split(',').map((id) => parseInt(id.trim(), 10)).filter((id) => !isNaN(id))
+            : [];
+        } else if (key !== 'updateProductImages') {
+          data[key] = value;
+        }
+      });
+
+      data.newImages = imageFiles;
+      console.log("Datos del formulario de actualización:", data);
+      console.log("Nuevos archivos de imagen:", imageFiles);
+    });
+  }
+</script>
