@@ -1,0 +1,322 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import FormInput from "@/pages/insert/FormInput.astro";
+import FormImageInput from "@/pages/insert/FormImageInput.astro";
+import FormSection from "@/pages/insert/FormSection.astro";
+import Products from "@/components/products/Products.astro";
+import SkeletonLoaderProduct from "@/components/loading/SkeletonLoaderProduct.astro";
+---
+
+<Layout title="Insert & Update">
+  <div class="flex flex-col md:flex-row min-h-screen bg-gray-50 dark:bg-gray-900 gap-4 p-4">
+    <!-- Sección de Formularios -->
+    <div class="w-full md:w-1/2 space-y-6 overflow-y-auto">
+      <!-- Grupo Insertar/Actualizar -->
+      <div class="grid gap-6">
+        <!-- Insertar -->
+        <div
+          class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+          <FormSection
+            title="Insertar Producto"
+            description="Completa los campos para agregar un nuevo producto"
+            formId="insertForm"
+            submitButtonText="Crear Producto"
+            submitButtonColor="indigo">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div><FormInput id="name" label="Nombre" type="text" required /></div>
+              <div><FormInput id="price" label="Precio" type="number" required /></div>
+              <div class="md:col-span-2">
+                <FormInput id="description" label="Descripción" type="textarea" required />
+              </div>
+              <div><FormInput id="categoryId" label="Categoría ID" type="text" required /></div>
+              <div><FormInput id="stock" label="Inventario" type="number" /></div>
+              <div><FormInput id="discount" label="Descuento (%)" type="number" /></div>
+              <div class="md:col-span-2">
+                <FormInput id="characteristics" label="Características" type="textarea" />
+              </div>
+              <div>
+                <FormInput id="coverImageIndex" label="Índice de Imagen Principal" type="number" />
+              </div>
+                <div><FormInput id="enabled" label="Habilitado" type="checkbox" checked/></div>
+            </div>
+            <div class="mt-4">
+              <FormImageInput id="images" label="Subir Imágenes" />
+            </div>
+            <div id="insertResult" class="mt-4 p-4 bg-gray-100 dark:bg-gray-700 rounded-md hidden">
+              <pre
+                class="font-mono text-xs p-2 rounded bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 overflow-x-auto">
+              </pre>
+            </div>
+          </FormSection>
+        </div>
+
+        <!-- Actualizar -->
+        <div
+          class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+          <FormSection
+            title="Actualizar Producto"
+            description="Modifica los campos que necesites actualizar"
+            formId="updateForm"
+            submitButtonText="Guardar Cambios"
+            submitButtonColor="blue">
+            <div class="space-y-4">
+              <div><FormInput id="id" label="ID del Producto" type="text" required /></div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div><FormInput id="name" label="Nuevo Nombre" type="text" /></div>
+                <div><FormInput id="price" label="Nuevo Precio" type="number" /></div>
+                <div class="md:col-span-2">
+                  <FormInput id="description" label="Nueva Descripción" type="textarea" />
+                </div>
+                <div><FormInput id="stock" label="Nuevo Inventario" type="number" /></div>
+                <div><FormInput id="discount" label="Nuevo Descuento" type="number" /></div>
+              </div>
+              <div>
+                <FormInput
+                  id="update-imagesToRemove"
+                  label="IDs de Imágenes a Eliminar"
+                  type="text"
+                  placeholder="Ejemplo: 123, 456, 789"
+                />
+              </div>
+              <div class="mt-2">
+                <FormImageInput id="imagesToAdd" label="Agregar Nuevas Imágenes" />
+              </div>
+            </div>
+            <div id="updateResult" class="mt-4 p-4 bg-gray-100 dark:bg-gray-700 rounded-md hidden">
+              <pre
+                class="font-mono text-xs p-2 rounded bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 overflow-x-auto">
+              </pre>
+            </div>
+          </FormSection>
+        </div>
+      </div>
+
+      <!-- Grupo Buscar/Eliminar -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Buscar -->
+        <div
+          class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+          <FormSection
+            title="Buscar Producto"
+            description="Proporciona el ID del producto que deseas buscar"
+            formId="searchForm"
+            submitButtonText="Buscar"
+            submitButtonColor="green">
+            <div><FormInput id="search-id" label="ID del Producto" type="text" required /></div>
+            <div id="jsonResult" class="mt-4 p-4 bg-gray-100 dark:bg-gray-700 rounded-md">
+              <pre
+                class="font-mono text-xs p-2 rounded bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 overflow-x-auto">
+              </pre>
+            </div>
+          </FormSection>
+        </div>
+
+        <!-- Eliminar -->
+        <div
+          class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+          <FormSection
+            title="Eliminar Producto"
+            description="Proporciona el ID del producto que deseas eliminar"
+            formId="deleteForm"
+            submitButtonText="Confirmar Eliminación"
+            submitButtonColor="red">
+            <div><FormInput id="delete-id" label="ID del Producto" type="text" required /></div>
+            <div id="deleteResult" class="mt-4 p-4 bg-gray-100 dark:bg-gray-700 rounded-md hidden">
+              <pre
+                class="font-mono text-xs p-2 rounded bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 overflow-x-auto">
+              </pre>
+            </div>
+          </FormSection>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sección de Productos -->
+    <div
+      class="w-full md:w-1/2 p-6 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 md:sticky md:top-4 h-fit md:h-[calc(100vh-2rem)]">
+      <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">
+        Listado de Productos
+      </h2>
+      <Products server:defer showId={true}>
+        <SkeletonLoaderProduct slot="fallback" />
+      </Products>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  @media (min-width: 768px) {
+    .overflow-y-auto {
+      max-height: calc(100vh - 2rem);
+    }
+  }
+</style>
+
+<script>
+  import {
+    getProductById,
+    createProduct,
+    updateProduct,
+    deleteProduct,
+  } from "@/services/api/products";
+
+  function filterEmptyFields(formData: FormData): FormData {
+    const filteredData = new FormData();
+
+    formData.forEach((value, key) => {
+      // Si es un archivo y se ha seleccionado (tiene nombre), lo incluimos sin modificarlo.
+      if (value instanceof File) {
+        if (value.name) {
+          filteredData.append(key, value);
+        }
+      } else if (typeof value === "string" && value.trim() !== "") {
+        const numberValue = Number(value);
+        if (!isNaN(numberValue) && value.trim() !== "") {
+          filteredData.append(key, numberValue.toString());
+        } else {
+          filteredData.append(key, value);
+        }
+      }
+      // Para checkboxes, incluimos el valor "true" si está marcado.
+      else if (key === "enabled" || key.includes("enabled")) {
+        if (value === "on") {
+          filteredData.append(key, "true");
+        }
+      }
+    });
+
+    return filteredData;
+  }
+
+  function handleImageInput(input: HTMLInputElement, previewId: string) {
+    const maxFiles = 5;
+    const previewContainer = document.getElementById(previewId);
+
+    input.addEventListener("change", () => {
+      if (!previewContainer) return;
+      previewContainer.innerHTML = "";
+
+      const files = Array.from(input.files || []);
+      if (files.length > maxFiles) {
+        alert(`Por favor, seleccione máximo ${maxFiles} imágenes`);
+        input.value = "";
+        return;
+      }
+
+      files.forEach((file) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = document.createElement("img");
+          img.src = e.target?.result as string;
+          img.classList.add("w-full", "h-24", "object-cover", "rounded");
+          previewContainer.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+  }
+
+  // Configurar visualización de imágenes para ambos formularios
+  handleImageInput(document.querySelector("#images") as HTMLInputElement, "images-preview");
+  handleImageInput(
+    document.querySelector("#imagesToAdd") as HTMLInputElement,
+    "imagesToAdd-preview"
+  );
+
+  const insertForm = document.getElementById("insertForm") as HTMLFormElement;
+  const insertResult = document.querySelector("#insertResult") as HTMLElement;
+  const insertPre = insertResult.querySelector("pre") as HTMLPreElement;
+
+  if (insertForm && insertResult && insertPre) {
+    insertForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const formData = filterEmptyFields(new FormData(insertForm));
+
+      const previewObject: any = {};
+      for (const [key, value] of formData.entries()) {
+        previewObject[key] = value instanceof File ? value.name : value;
+      }
+      let preview = `Request:\n${JSON.stringify(previewObject, null, 2)}\n\n`;
+
+      try {
+        const response = await createProduct(formData);
+        insertResult.classList.remove("hidden");
+        preview += `Response:\n${JSON.stringify(response, null, 2)}`;
+      } catch (error) {
+        insertResult.classList.remove("hidden");
+        preview += "Error al crear el producto: " + error;
+      }
+      insertPre.textContent = preview;
+    });
+  }
+
+  const updateForm = document.getElementById("updateForm") as HTMLFormElement;
+  const updateResult = document.querySelector("#updateResult") as HTMLElement;
+  const updatePre = updateResult.querySelector("pre") as HTMLPreElement;
+
+  if (updateForm && updateResult && updatePre) {
+    updateForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const formData = filterEmptyFields(new FormData(updateForm));
+      const productId = formData.get("id") as string;
+
+      formData.delete("id");
+
+      const previewObject: any = {};
+      for (const [key, value] of formData.entries()) {
+        previewObject[key] = value instanceof File ? value.name : value;
+      }
+      let preview = `Request:\n${JSON.stringify(previewObject, null, 2)}\n\n`;
+
+      try {
+        const response = await updateProduct(productId, formData);
+        updateResult.classList.remove("hidden");
+        preview += `Response:\n${JSON.stringify(response, null, 2)}`;
+      } catch (error) {
+        updateResult.classList.remove("hidden");
+        preview += "Error al actualizar el producto: " + error;
+      }
+      updatePre.textContent = preview;
+    });
+  }
+
+  const deleteForm = document.getElementById("deleteForm") as HTMLFormElement;
+  const deleteResult = document.querySelector("#deleteResult") as HTMLElement;
+  const deletePre = deleteResult.querySelector("pre") as HTMLPreElement;
+
+  if (deleteForm && deleteResult && deletePre) {
+    deleteForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const formData = new FormData(deleteForm);
+      const productId = formData.get("delete-id") as string;
+
+      try {
+        const response = await deleteProduct(productId);
+        deleteResult.classList.remove("hidden");
+        deletePre.textContent = JSON.stringify(response, null, 2);
+      } catch (error) {
+        deleteResult.classList.remove("hidden");
+        deletePre.textContent = "Error al eliminar el producto: " + error;
+      }
+    });
+  }
+
+  const searchForm = document.getElementById("searchForm") as HTMLFormElement;
+  const jsonResult = document.querySelector("#jsonResult pre") as HTMLPreElement;
+
+  if (searchForm && jsonResult) {
+    searchForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const formData = new FormData(searchForm);
+      const productId = formData.get("search-id");
+
+      try {
+        const product = await getProductById(productId as string);
+        jsonResult.textContent = JSON.stringify(product, null, 2);
+      } catch (error) {
+        jsonResult.textContent = "Error al obtener el producto: " + error;
+      }
+    });
+  }
+</script>

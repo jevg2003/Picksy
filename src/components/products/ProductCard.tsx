@@ -6,6 +6,7 @@ import type { Product } from "@/types/api/product";
 
 interface ProductCardProps extends Product {
   imageLink: string;
+  showId: boolean;
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({
@@ -20,6 +21,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   discount,
   characteristics,
   enabled,
+  showId,
   createdAt,
   updatedAt,
 }) => {
@@ -33,6 +35,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       <div
         className="bg-white rounded-lg overflow-hidden shadow hover:shadow-lg transition-transform transform hover:scale-105 cursor-pointer p-6"
         onClick={openModal}>
+        {showId && <span className="absolute top-2 right-2 text-gray-500 text-sm">{id}</span>}
         {/* Imagen del producto */}
         <img src={imageLink} alt={description} className="w-full h-48 object-contain" />
         {/* Información del producto */}
