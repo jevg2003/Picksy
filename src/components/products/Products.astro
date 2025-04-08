@@ -5,7 +5,7 @@ const { content: products } = await getProducts({
   size: 100,
 });
 interface Props {
-  showId: boolean;
+  showId?: boolean;
 }
 
 const { showId = false } = Astro.props as Props;
