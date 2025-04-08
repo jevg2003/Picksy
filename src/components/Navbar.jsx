@@ -1,190 +1,228 @@
-import { useState, useEffect, useRef } from "react";
-import { Sun, Moon, Monitor, ShoppingCart, Search, X } from "lucide-react";
+import { useState, useEffect, useRef, useCallback, memo } from 'react';
+import { Sun, Moon, Monitor, ShoppingCart, Search, X } from 'lucide-react';
+
+const ThemeButton = memo(({ theme, currentMode, Icon, label, onClick }) => (
+  <button
+    onClick={() => onClick(theme)}
+    className="flex-1 flex flex-col items-center justify-center py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
+  >
+    <Icon
+      size={28}
+      className={`mb-1 ${
+        currentMode === theme
+          ? 'text-blue-500'
+          : 'text-gray-600 dark:text-gray-300'
+      }`}
+    />
+    <span className="text-xs capitalize">{label}</span>
+  </button>
+));
 
 export default function Navbar() {
-  // El modo puede ser "system", "dark" o "light"
-  const [mode, setMode] = useState("system");
+  const [mode, setMode] = useState(() => localStorage.getItem('theme') || 'system');
   const [mounted, setMounted] = useState(false);
   const [showMobileSearch, setShowMobileSearch] = useState(false);
+  const [showModeSelector, setShowModeSelector] = useState(false);
   const searchInputRef = useRef(null);
 
-  // Al montar, indicamos que el componente ya está en el cliente y leemos el modo guardado
-  useEffect(() => {
-    setMounted(true);
-    const storedMode = localStorage.getItem("theme");
-    if (storedMode) {
-      setMode(storedMode);
-    }
+  // Memoized handlers
+  const handleSetMode = useCallback((newMode) => {
+    setMode(newMode);
+    setShowModeSelector(false);
   }, []);
 
-  // Actualiza la clase "dark" en el documento según el modo seleccionado
+  const toggleMobileSearch = useCallback(() => {
+    setShowMobileSearch(prev => !prev);
+  }, []);
+
+  const toggleModeSelector = useCallback(() => {
+    setShowModeSelector(prev => !prev);
+  }, []);
+
+  // Efectos optimizados
+  useEffect(() => {
+    setMounted(true);
+    return () => setMounted(false);
+  }, []);
+
   useEffect(() => {
     if (!mounted) return;
+    
+    const applyDarkMode = (shouldApply) => {
+      document.documentElement.classList.toggle('dark', shouldApply);
+      localStorage.setItem('theme', mode);
+    };
 
-    if (mode === "system") {
-      const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-      const applySystemPreference = () => {
-        if (mediaQuery.matches) {
-          document.documentElement.classList.add("dark");
-        } else {
-          document.documentElement.classList.remove("dark");
-        }
-      };
-      applySystemPreference();
-      mediaQuery.addEventListener("change", applySystemPreference);
-      return () => {
-        mediaQuery.removeEventListener("change", applySystemPreference);
-      };
-    } else if (mode === "dark") {
-      document.documentElement.classList.add("dark");
-    } else if (mode === "light") {
-      document.documentElement.classList.remove("dark");
+    if (mode === 'system') {
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      const handler = (e) => applyDarkMode(e.matches);
+      mediaQuery.addEventListener('change', handler);
+      applyDarkMode(mediaQuery.matches);
+      return () => mediaQuery.removeEventListener('change', handler);
     }
-    localStorage.setItem("theme", mode);
+    
+    applyDarkMode(mode === 'dark');
   }, [mode, mounted]);
 
-  // Enfoca el input de búsqueda en mobile cuando se muestra la barra
   useEffect(() => {
     if (showMobileSearch && searchInputRef.current) {
       searchInputRef.current.focus();
     }
   }, [showMobileSearch]);
 
-  // Función para establecer el modo seleccionado
-  const handleSetMode = (newMode) => {
-    setMode(newMode);
-  };
-
-  // Calcula la posición del indicador según el modo
-  const getIndicatorStyle = () => {
-    let translatePercent = 0;
-    if (mode === "system") {
-      translatePercent = 0;
-    } else if (mode === "dark") {
-      translatePercent = 100;
-    } else if (mode === "light") {
-      translatePercent = 200;
-    }
-    return {
-      transform: `translateX(${translatePercent}%)`
+  // Scroll blocking optimizado
+  useEffect(() => {
+    const isMobile = window.innerWidth < 1024;
+    document.body.style.overflow = (showMobileSearch || showModeSelector) && isMobile 
+      ? 'hidden' 
+      : '';
+    
+    return () => {
+      document.body.style.overflow = '';
     };
-  };
+  }, [showMobileSearch, showModeSelector]);
 
-  // Función para asignar color al ícono según si está activo
-  const getIconColor = (btnMode) => {
-    return mode === btnMode ? "text-white" : "text-gray-700";
-  };
-
+  // Componente optimizado
   return (
     <>
-      <nav className=" sm:fixed top-0 left-0 w-full z-50 p-4 shadow-md bg-white text-gray-900 dark:bg-gray-900 dark:text-white">
-        <div className="flex flex-col gap-2">
-          {/* Primera fila: logo, buscador y otros íconos */}
+      <nav className="sm:fixed top-0 left-0 w-full z-50 p-4 shadow-md bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
+        <div className="flex flex-col gap-2 relative">
           <div className="flex justify-between items-center">
-            {/* Logo */}
-            <a href="#">
+            <a href="#" aria-label="Home">
               <img
                 src="./IMG/PICKSYName.svg"
-                alt="Logo de la empresa Picksy"
+                alt="Picksy Logo"
                 className="h-10 w-auto mr-2 dark:hidden"
+                loading="lazy"
               />
               <img
                 src="./IMG/PICKSYNameBlanco.svg"
-                alt="Logo Dark Mode"
+                alt="Picksy Dark Logo"
                 className="h-10 w-auto hidden dark:block"
+                loading="lazy"
               />
             </a>
 
-            {/* Buscador para pantallas grandes */}
             <div className="hidden lg:flex flex-1 mx-4 justify-center">
               <div className="relative w-[35%]">
                 <input
                   type="text"
                   placeholder="Buscar..."
-                  className="w-full p-2 pl-10 pr-10 border rounded-full focus:outline-none focus:ring-2 focus:ring-gray-600 dark:focus:ring-gray-400 bg-transparent text-gray-900 dark:text-white border-gray-700 placeholder-gray-400 text-lg"
+                  className="w-full p-2 pl-10 pr-10 border rounded-full focus:outline-none focus:ring-2 focus:ring-gray-600 dark:focus:ring-gray-400 bg-transparent border-gray-700 placeholder-gray-400 text-lg"
                 />
-                <Search
-                  className="absolute left-3 top-3.5 text-gray-500"
-                  size={18}
-                />
+                <Search className="absolute left-3 top-3.5 text-gray-500" size={18} />
               </div>
             </div>
 
-            {/* Íconos para mobile */}
-            <div className="flex items-center gap-4 lg:hidden">
+            <div className="flex items-center gap-4">
               <button
-                className="p-2"
-                onClick={() => setShowMobileSearch((prev) => !prev)}
+                className="p-2 lg:hidden transition-transform hover:scale-110"
+                onClick={toggleMobileSearch}
+                aria-label="Search"
               >
-                <Search size={24} className="text-gray-900" />
+                <Search size={24} />
               </button>
-              <ShoppingCart className="cursor-pointer" size={24} />
-            </div>
-          </div>
-
-          {/* Segunda fila: Barra de Dark Mode con íconos */}
-          <div className="flex justify-center">
-            <div className="relative w-30 h-12 bg-gray-200 dark:bg-gray-800 rounded-full flex items-center overflow-hidden">
-              {/* Indicador animado (bolita) */}
-              <div
-                className="absolute h-10 w-10 bg-blue-500 rounded-full shadow-md transition-all duration-300"
-                style={getIndicatorStyle()}
-              ></div>
-              {/* Botones: cada uno ocupa 1/3 */}
-              <div className="flex justify-around items-center relative w-full z-10">
+              
+              <ShoppingCart className="cursor-pointer" size={24} aria-label="Cart" />
+              
+              <div className="relative">
                 <button
-                  onClick={() => handleSetMode("system")}
-                  className="w-1/3 flex justify-center items-center"
+                  className="p-2 transition-transform duration-200 hover:scale-110"
+                  onClick={toggleModeSelector}
+                  aria-label="Theme selector"
                 >
-                  <Monitor size={24} className={getIconColor("system")} />
+                  {mode === 'system' && <Monitor size={24} />}
+                  {mode === 'dark' && <Moon size={24} />}
+                  {mode === 'light' && <Sun size={24} />}
                 </button>
-                <button
-                  onClick={() => handleSetMode("dark")}
-                  className="w-1/3 flex justify-center items-center"
-                >
-                  <Moon size={24} className={getIconColor("dark")} />
-                </button>
-                <button
-                  onClick={() => handleSetMode("light")}
-                  className="w-1/3 flex justify-center items-center"
-                >
-                  <Sun size={24} className={getIconColor("light")} />
-                </button>
+                
+                <div className={`hidden lg:block absolute top-full right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded shadow-lg transition-all duration-300 ease-out ${
+                  showModeSelector 
+                    ? 'opacity-100 translate-y-0' 
+                    : 'opacity-0 translate-y-2 pointer-events-none'
+                }`}>
+                  <div className="flex divide-x divide-gray-300 dark:divide-gray-700">
+                    <ThemeButton
+                      theme="system"
+                      currentMode={mode}
+                      Icon={Monitor}
+                      label="System"
+                      onClick={handleSetMode}
+                    />
+                    <ThemeButton
+                      theme="dark"
+                      currentMode={mode}
+                      Icon={Moon}
+                      label="Dark"
+                      onClick={handleSetMode}
+                    />
+                    <ThemeButton
+                      theme="light"
+                      currentMode={mode}
+                      Icon={Sun}
+                      label="Light"
+                      onClick={handleSetMode}
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Barra de búsqueda móvil (se desliza desde la derecha) */}
-        <div
-          className={`lg:hidden absolute top-0 right-0 h-full flex items-center pr-4 transition-transform duration-300 ${
-            showMobileSearch ? "translate-x-0" : "translate-x-full"
-          }`}
-          style={{ width: "65%" }}
-        >
-          <div className="relative w-full">
-            <input
-              ref={searchInputRef}
-              type="text"
-              placeholder="Buscar..."
-              className="w-full p-2 pl-10 pr-10 border rounded-full focus:outline-none focus:ring-2 focus:ring-gray-600 bg-white text-gray-900 border-gray-700 placeholder-gray-400 text-base"
-            />
-            <Search
-              className="absolute left-3 top-3 text-gray-500"
-              size={18}
-            />
-            <button
-              onClick={() => setShowMobileSearch(false)}
-              className="absolute right-3 top-2.5"
-            >
-              <X size={24} className="text-gray-500" />
-            </button>
-          </div>
+          {/* Mobile Components */}
+          <MobileThemeSelector
+            show={showModeSelector}
+            currentMode={mode}
+            onClose={() => setShowModeSelector(false)}
+            onSelect={handleSetMode}
+          />
+
+          <MobileSearchBar
+            show={showMobileSearch}
+            inputRef={searchInputRef}
+            onClose={() => setShowMobileSearch(false)}
+          />
         </div>
       </nav>
-
-      {/* Espaciador para que el contenido no quede oculto debajo del navbar */}
-      <div className="sm:h-33"></div>
+      <div className="sm:h-33" />
     </>
   );
 }
+
+// Componentes móviles memoizados
+const MobileThemeSelector = memo(({ show, currentMode, onClose, onSelect }) => (
+  <div className="lg:hidden">
+    <div className={`fixed bottom-0 left-1/2 -translate-x-1/2 w-[80%] h-16 bg-white dark:bg-gray-900 z-[60] flex items-center justify-center rounded-t-xl transition-all duration-300 ease-out ${
+      show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-full'
+    }`}>
+      <ThemeButton theme="system" currentMode={currentMode} Icon={Monitor} onClick={onSelect} />
+      <ThemeButton theme="dark" currentMode={currentMode} Icon={Moon} onClick={onSelect} />
+      <ThemeButton theme="light" currentMode={currentMode} Icon={Sun} onClick={onSelect} />
+      <button onClick={onClose} className="absolute top-2 right-4" aria-label="Close">
+        <X size={24} className="text-gray-500" />
+      </button>
+    </div>
+  </div>
+));
+
+const MobileSearchBar = memo(({ show, inputRef, onClose }) => (
+  <div
+    className="lg:hidden overflow-hidden transition-[max-height] duration-300 ease-in-out"
+    style={{ maxHeight: show ? '60px' : '0px' }}
+  >
+    <div className="w-full p-4 bg-white dark:bg-gray-900">
+      <div className="relative w-full">
+        <input
+          ref={inputRef}
+          type="text"
+          placeholder="Buscar..."
+          className="w-full p-2 pl-10 pr-10 border rounded-full focus:outline-none focus:ring-2 focus:ring-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white border-gray-300 dark:border-gray-700 placeholder-gray-400 text-base"
+        />
+        <Search className="absolute left-3 top-3 text-gray-500" size={18} />
+        <button onClick={onClose} className="absolute right-3 top-2.5" aria-label="Close">
+          <X size={24} className="text-gray-500" />
+        </button>
+      </div>
+    </div>
+  </div>
+));
