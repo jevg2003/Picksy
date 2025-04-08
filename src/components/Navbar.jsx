@@ -207,7 +207,6 @@ const MobileThemeSelector = memo(({ show, currentMode, onClose, onSelect }) => (
       <ThemeButton theme="dark" currentMode={currentMode} Icon={Moon} onClick={onSelect} />
       <ThemeButton theme="light" currentMode={currentMode} Icon={Sun} onClick={onSelect} />
       <button onClick={onClose} className="absolute top-2 right-4" aria-label="Close">
-        <X size={24} className="text-gray-500" />
       </button>
     </div>
   </div>
