@@ -1,5 +1,3 @@
-import React from 'react';
-
 export default function Sidebar() {
   return (
     <aside className="fixed w-[15%] h-[90%] text-black flex flex-col">

@@ -98,7 +98,7 @@ export default function Navbar() {
   return (
     <>
       <nav className="sm:fixed top-0 left-0 w-full z-50 p-4 shadow-md bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
-        <div className="flex flex-col gap-2 relative">
+        <div className="flex flex-col gap-2 relative ">
           <div className="flex justify-between items-center">
             <a href="#" aria-label="Home">
               <img

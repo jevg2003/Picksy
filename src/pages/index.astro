@@ -14,12 +14,14 @@ export const prerender = true;
   <div class="flex flex-col min-h-screen dark:bg-gray-900 dark:text-white bg-gray-100 text-gray-900">
     <Navbar client:load />
 
-    <div class="flex flex-1">
-      <aside class="w-[15%] max-h-screen overflow-y-auto">
+    <div class="flex flex-1 flex-col lg:flex-row">
+      {/* Sidebar solo visible en desktop (lg: 1024px) */}
+      <aside class="hidden lg:block lg:w-[15%] max-h-screen overflow-y-auto">
         <Sidebar />
       </aside>
 
-      <div class="w-[85%] flex flex-col items-center">
+      {/* Contenido principal - 100% width en mobile/tablet */}
+      <div class="w-full lg:w-[85%] flex flex-col items-center">
         <Hero client:load />
         <Products server:defer>
           <SkeletonLoaderProduct slot="fallback" />
