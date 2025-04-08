@@ -19,34 +19,24 @@ const ThemeButton = memo(({ theme, currentMode, Icon, label, onClick }) => (
 ));
 
 export default function Navbar() {
-  const [mode, setMode] = useState(() => localStorage.getItem('theme') || 'system');
+  const [mode, setMode] = useState('system');
   const [mounted, setMounted] = useState(false);
   const [showMobileSearch, setShowMobileSearch] = useState(false);
   const [showModeSelector, setShowModeSelector] = useState(false);
   const searchInputRef = useRef(null);
 
-  // Memoized handlers
-  const handleSetMode = useCallback((newMode) => {
-    setMode(newMode);
-    setShowModeSelector(false);
-  }, []);
-
-  const toggleMobileSearch = useCallback(() => {
-    setShowMobileSearch(prev => !prev);
-  }, []);
-
-  const toggleModeSelector = useCallback(() => {
-    setShowModeSelector(prev => !prev);
-  }, []);
-
-  // Efectos optimizados
+  // Efecto para cargar el tema desde localStorage solo en cliente
   useEffect(() => {
     setMounted(true);
-    return () => setMounted(false);
+    if (typeof window !== 'undefined') {
+      const storedMode = localStorage.getItem('theme');
+      if (storedMode) setMode(storedMode);
+    }
   }, []);
 
+  // Efecto para aplicar el tema
   useEffect(() => {
-    if (!mounted) return;
+    if (!mounted || typeof window === 'undefined') return;
     
     const applyDarkMode = (shouldApply) => {
       document.documentElement.classList.toggle('dark', shouldApply);
@@ -70,8 +60,9 @@ export default function Navbar() {
     }
   }, [showMobileSearch]);
 
-  // Scroll blocking optimizado
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
     const isMobile = window.innerWidth < 1024;
     document.body.style.overflow = (showMobileSearch || showModeSelector) && isMobile 
       ? 'hidden' 
@@ -82,7 +73,28 @@ export default function Navbar() {
     };
   }, [showMobileSearch, showModeSelector]);
 
-  // Componente optimizado
+  const handleSetMode = useCallback((newMode) => {
+    setMode(newMode);
+    setShowModeSelector(false);
+  }, []);
+
+  const toggleMobileSearch = useCallback(() => {
+    setShowMobileSearch(prev => !prev);
+  }, []);
+
+  const toggleModeSelector = useCallback(() => {
+    setShowModeSelector(prev => !prev);
+  }, []);
+
+  const getCurrentModeIcon = () => {
+    if (!mounted) return <Monitor size={24} />;
+    return {
+      system: <Monitor size={24} />,
+      dark: <Moon size={24} />,
+      light: <Sun size={24} />
+    }[mode];
+  };
+
   return (
     <>
       <nav className="sm:fixed top-0 left-0 w-full z-50 p-4 shadow-md bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
@@ -120,7 +132,7 @@ export default function Navbar() {
                 onClick={toggleMobileSearch}
                 aria-label="Search"
               >
-                <Search size={24} />
+                <Search size={24} className="text-gray-900 dark:text-white" />
               </button>
               
               <ShoppingCart className="cursor-pointer" size={24} aria-label="Cart" />
@@ -131,9 +143,7 @@ export default function Navbar() {
                   onClick={toggleModeSelector}
                   aria-label="Theme selector"
                 >
-                  {mode === 'system' && <Monitor size={24} />}
-                  {mode === 'dark' && <Moon size={24} />}
-                  {mode === 'light' && <Sun size={24} />}
+                  {getCurrentModeIcon()}
                 </button>
                 
                 <div className={`hidden lg:block absolute top-full right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded shadow-lg transition-all duration-300 ease-out ${
@@ -169,7 +179,6 @@ export default function Navbar() {
             </div>
           </div>
 
-          {/* Mobile Components */}
           <MobileThemeSelector
             show={showModeSelector}
             currentMode={mode}
@@ -189,7 +198,6 @@ export default function Navbar() {
   );
 }
 
-// Componentes móviles memoizados
 const MobileThemeSelector = memo(({ show, currentMode, onClose, onSelect }) => (
   <div className="lg:hidden">
     <div className={`fixed bottom-0 left-1/2 -translate-x-1/2 w-[80%] h-16 bg-white dark:bg-gray-900 z-[60] flex items-center justify-center rounded-t-xl transition-all duration-300 ease-out ${
