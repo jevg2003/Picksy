@@ -193,7 +193,7 @@ export default function Navbar() {
           />
         </div>
       </nav>
-      <div className="sm:h-33" />
+      <div className="sm:h-19" />
     </>
   );
 }
