@@ -1,10 +1,10 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import Hero from "../components/Hero.jsx";
-import Navbar from "../components/Navbar.jsx";
-import Sidebar from "../components/Sidebar.jsx";
+import Layout from "@/layouts/Layout.astro";
+import Hero from "@/components/Hero.jsx";
+import Navbar from "@/components/Navbar.jsx";
+import Sidebar from "@/components/Sidebar.jsx";
 import Products from "@/components/products/Products.astro";
-import Footer from "../components/Footer.astro";
+import Footer from "@/components/Footer.astro";
 import SkeletonLoaderProduct from "@/components/loading/SkeletonLoaderProduct.astro";
 
 export const prerender = true;
@@ -15,12 +15,11 @@ export const prerender = true;
     <Navbar client:load />
 
     <div class="flex flex-1 flex-col lg:flex-row">
-      {/* Sidebar solo visible en desktop (lg: 1024px) */}
+      
       <aside class="hidden lg:block lg:w-[15%] max-h-screen overflow-y-auto">
         <Sidebar />
       </aside>
 
-      {/* Contenido principal - 100% width en mobile/tablet */}
       <div class="w-full lg:w-[85%] flex flex-col items-center">
         <Hero client:load />
         <Products server:defer>
@@ -28,7 +27,6 @@ export const prerender = true;
         </Products>
       </div>
     </div>
-
     <Footer />
   </div>
 </Layout>
