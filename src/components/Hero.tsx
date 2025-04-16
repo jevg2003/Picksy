@@ -12,7 +12,7 @@ export default function Hero() {
   ];
 
   return (
-    <section className="mt-5 w-[98%] h-[500px] flex items-center justify-center bg-gray-100 relative">
+    <section className="mt-5 w-[98%] h-[500px] flex items-center justify-center relative">
       <div className="w-full h-[500px] relative">
         <Swiper
           modules={[Navigation, Pagination, Autoplay]}
