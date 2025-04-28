@@ -1,9 +1,16 @@
 ---
+// Products.astro
 import { getProducts } from "@/services/api/products";
 import { ProductCard } from "./ProductCard";
 const { content: products } = await getProducts({
   size: 100,
 });
+
+// Ordenar productos por fecha de creación descendente
+const sortedProducts = [...products].sort((a, b) => 
+  new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+);
+
 interface Props {
   showId?: boolean;
 }
@@ -15,9 +22,9 @@ const { showId = false } = Astro.props as Props;
   <div class="container mx-auto px-4">
     <h2 class="text-6xl text-start mb-20">Productos</h2>
     {
-      products.length > 0 ? (
+      sortedProducts.length > 0 ? (
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-          {products.map((product) => (
+          {sortedProducts.map((product) => (
             <ProductCard
               client:only="react"
               {...product}
