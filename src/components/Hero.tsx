@@ -6,6 +6,7 @@ import ProductCarousel, { type CarouselProduct } from "@/components/ProductCarou
 
 export default function Hero() {
   const [products, setProducts] = useState<CarouselProduct[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const loadProducts = async () => {
@@ -20,6 +21,8 @@ export default function Hero() {
         setProducts(lastThree);
       } catch (error) {
         console.error("Error loading products:", error);
+      }finally {
+        setIsLoading(false); // Actualiza el estado de carga
       }
     };
 
@@ -29,7 +32,12 @@ export default function Hero() {
   return (
     <section className="mt-5 w-[98%] h-[500px] flex items-center justify-center relative">
       <div className="w-full h-[500px] relative">
-        <ProductCarousel products={products} />
+      {!isLoading && ( // Renderizado condicional
+          <ProductCarousel 
+            products={products}
+            key={products.length} // Fuerza reinicialización
+          />
+        )}
       </div>
     </section>
   );

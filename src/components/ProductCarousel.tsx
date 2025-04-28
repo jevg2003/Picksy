@@ -30,7 +30,7 @@ export default function ProductCarousel({ products }: ProductCarouselProps) {
         }}
         pagination={{ clickable: true }}
         loop={true}
-        autoplay={{ delay: 5000, disableOnInteraction: false }}
+        autoplay={{ delay: 3200, disableOnInteraction: false }}
         className="rounded-lg shadow-lg h-[500px]">
         {products.map((product) => (
           <SwiperSlide key={product.id} className="relative h-[500px]">

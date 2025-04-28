@@ -1,6 +1,6 @@
+// ProductCard.tsx
 import React from "react";
 import { useState } from "react";
-
 import ModalProduct from "./ModalProduct";
 import type { Product } from "@/types/api/product";
 
@@ -33,16 +33,18 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   return (
     <>
       <div
-        className="bg-white rounded-lg overflow-hidden shadow hover:shadow-lg transition-transform transform hover:scale-105 cursor-pointer p-6"
+        className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow hover:shadow-lg transition-transform transform hover:scale-105 cursor-pointer p-6"
         onClick={openModal}>
-        {showId && <span className="absolute top-2 right-2 text-gray-500 text-sm">{id}</span>}
-        {/* Imagen del producto */}
-        <img src={imageLink} alt={description} className="w-full h-48 object-contain" />
-        {/* Información del producto */}
-        <div className="p-4 bg-white">
-          <h3 className="text-lg font-semibold">{name}</h3>
-          <p className="text-gray-600">{description}</p>
-          <p className="text-gray-600 font-bold">
+        {showId && <span className="absolute top-2 right-2 text-gray-500 dark:text-gray-400 text-sm">{id}</span>}
+        <img 
+          src={imageLink} 
+          alt={description} 
+          className="w-full h-48 object-contain bg-gray-100 dark:bg-gray-800 p-2 rounded" 
+        />
+        <div className="p-4 bg-white dark:bg-gray-800">
+          <h3 className="text-lg font-semibold dark:text-gray-200">{name}</h3>
+          <p className="text-gray-600 dark:text-gray-400">{description}</p>
+          <p className="text-gray-600 dark:text-gray-300 font-bold">
             {new Intl.NumberFormat("es-CO", {
               style: "currency",
               currency: "COP",

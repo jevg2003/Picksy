@@ -1,3 +1,4 @@
+// ModalProduct.tsx
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
@@ -14,13 +15,13 @@ interface ModalProductProps {
 const ModalProduct: React.FC<ModalProductProps> = ({ product, closeModal }) => {
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-white/5 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 dark:bg-white/5 backdrop-blur-sm"
       onClick={closeModal}>
       <div
-        className="bg-white rounded-lg overflow-hidden w-[1000px] h-[600px] relative flex shadow-lg "
+        className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden w-[1000px] h-[600px] relative flex shadow-lg"
         onClick={(e) => e.stopPropagation()}>
         <button
-          className="absolute top-1 right-2 text-gray-600 hover:text-gray-800 text-2xl cursor-pointer"
+          className="absolute top-1 right-2 text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 text-2xl cursor-pointer"
           onClick={closeModal}>
           &times;
         </button>
@@ -29,13 +30,13 @@ const ModalProduct: React.FC<ModalProductProps> = ({ product, closeModal }) => {
             modules={[Navigation, Pagination]}
             navigation
             pagination={{ clickable: true }}
-            className="w-full h-full">
+            className="w-full h-full bg-gray-100 dark:bg-gray-700">
             {product.images.map((img, index) => (
               <SwiperSlide key={index} className="w-full h-full">
                 <img
                   src={img.link}
                   alt={`${product.name} ${index + 1}`}
-                  className="px-auto cover"
+                  className="px-auto cover object-contain bg-white dark:bg-gray-600"
                 />
               </SwiperSlide>
             ))}
@@ -43,27 +44,25 @@ const ModalProduct: React.FC<ModalProductProps> = ({ product, closeModal }) => {
         </div>
 
         <div className="w-1/2 pl-2 flex flex-col justify-center p-4">
-          <h2 className="text-3xl font-bold mb-4">{product.name}</h2>
-          <p className="font-bold text-2xl text-gray-700 mb-4">
+          <h2 className="text-3xl font-bold mb-4 dark:text-white">{product.name}</h2>
+          <p className="font-bold text-2xl text-gray-700 dark:text-gray-300 mb-4">
             {new Intl.NumberFormat("es-CO", {
               style: "currency",
               currency: "COP",
             }).format(product.price)}
           </p>
-          {/* Línea divisoria */}
-          <hr className="mb-4" />
-          {/* Sección de características */}
+          <hr className="mb-4 border-gray-200 dark:border-gray-600" />
           <div className="mb-6">
-            <h3 className="text-xl font-semibold mb-2">Características</h3>
-            <p className="text-gray-600">
+            <h3 className="text-xl font-semibold mb-2 dark:text-gray-200">Características</h3>
+            <p className="text-gray-600 dark:text-gray-400">
               {product.description ? product.description : "Sin características definidas."}
             </p>
           </div>
           <div className="space-y-4">
-            <button className="w-full px-4 py-3 bg-blue-500 text-white rounded hover:bg-blue-600">
+            <button className="w-full px-4 py-3 bg-blue-500 dark:bg-blue-600 text-white rounded hover:bg-blue-600 dark:hover:bg-blue-700">
               Agregar al carrito
             </button>
-            <button className="w-full px-4 py-3 bg-gray-500 text-white rounded hover:bg-gray-600">
+            <button className="w-full px-4 py-3 bg-gray-500 dark:bg-gray-600 text-white rounded hover:bg-gray-600 dark:hover:bg-gray-700">
               Averiguar más
             </button>
           </div>
