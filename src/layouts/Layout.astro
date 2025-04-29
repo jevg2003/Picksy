@@ -15,8 +15,6 @@ const {title = "Picksy"} = Astro.props
   				localStorage.theme === "dark" ||
     			(!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches),
 			);
-			console.log("DEBUG: Tema inicial aplicado:", document.documentElement.classList.contains("dark")? "dark" : "light");
-
 		</script>
 	</head>
 	<body>
