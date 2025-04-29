@@ -2,7 +2,7 @@
 import { memo, useEffect } from 'react';
 import { Sun, Moon, Monitor, X } from 'lucide-react';
 import FiltersList, { SocialIcons } from './Filters';
-import SearchBar from './searchBar';
+import SearchBar from './SearchBar';
 
 const MobileMenu = memo(({ show, onClose, currentMode, onThemeChange }) => {
   useEffect(() => {

@@ -7,12 +7,14 @@ import Products from "@/components/products/Products.astro";
 import Footer from "@/components/Footer.astro";
 import SkeletonLoaderProduct from "@/components/loading/SkeletonLoaderProduct.astro";
 
-export const prerender = true;
+export const prerender = false;
+export const ssr = true;
+const searchParam = Astro.url.searchParams.get('search') || '';
 ---
 
 <Layout>
   <div class="flex flex-col min-h-screen dark:bg-gray-900 dark:text-white bg-gray-100 text-gray-900">
-    <Navbar client:load />
+    <Navbar client:load initialSearch={searchParam} />
 
     <div class="flex flex-1 flex-col lg:flex-row">
       
@@ -22,7 +24,7 @@ export const prerender = true;
 
       <div class="w-full lg:w-[85%] flex flex-col items-center">
         <Hero client:load />
-        <Products>
+        <Products search={searchParam}>
           <SkeletonLoaderProduct slot="fallback" />
         </Products>
       </div>
