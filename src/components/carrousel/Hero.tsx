@@ -11,8 +11,8 @@ export default function Hero() {
   useEffect(() => {
     const loadProducts = async () => {
       try {
-        const response = await getProducts({ size: 100 });
-        const lastThree = response.content.slice(-5).map((product) => ({
+        const response = await getProducts({ size: 3, order: "desc" });
+        const lastThree = response.content.map((product) => ({
           id: product.id,
           name: product.name,
           price: product.price,

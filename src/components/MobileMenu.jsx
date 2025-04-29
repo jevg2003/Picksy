@@ -1,7 +1,8 @@
 // components/MobileMenu.jsx
 import { memo, useEffect } from 'react';
-import { Sun, Moon, Monitor, Search, X } from 'lucide-react';
+import { Sun, Moon, Monitor, X } from 'lucide-react';
 import FiltersList, { SocialIcons } from './Filters';
+import SearchBar from './searchBar';
 
 const MobileMenu = memo(({ show, onClose, currentMode, onThemeChange }) => {
   useEffect(() => {
@@ -53,12 +54,7 @@ const MobileMenu = memo(({ show, onClose, currentMode, onThemeChange }) => {
             
             {/* Barra de búsqueda con transición */}
             <div className="relative transition-all duration-300">
-              <input
-                type="text"
-                placeholder="Buscar..."
-                className="w-full pl-12 pr-4 py-3 text-base bg-gray-100 dark:bg-gray-800 rounded-xl focus:ring-2 focus:ring-blue-500 border-none transition-all duration-300"
-              />
-              <Search className="absolute left-4 top-3.5 text-gray-500 transition-colors duration-300" size={20}/>
+              <SearchBar className="mb-4 text-base rounded-xl" />
             </div>
           </div>
 

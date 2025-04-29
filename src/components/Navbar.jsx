@@ -1,7 +1,8 @@
 // components/Navbar.jsx
 import { useState, useEffect, memo } from 'react';
-import { Sun, Moon, Monitor, ShoppingCart, Search, Menu } from 'lucide-react';
+import { Sun, Moon, Monitor, ShoppingCart, Menu } from 'lucide-react';
 import MobileMenu from './MobileMenu';
+import SearchBar from './searchBar';
 
 const Navbar = memo(() => {
   const [mode, setMode] = useState('system');
@@ -41,11 +42,6 @@ const Navbar = memo(() => {
     document.documentElement.classList.toggle('dark', isDark);
   };
 
-  const getThemeIcon = () => ({
-    system: <Monitor size={22} className="text-gray-900 dark:text-white"/>,
-    dark: <Moon size={22} className="text-gray-900 dark:text-white"/>,
-    light: <Sun size={22} className="text-gray-900 dark:text-white"/>
-  }[mode]);
 
   return (
     <>
@@ -72,13 +68,8 @@ const Navbar = memo(() => {
           {/* Elementos desktop */}
           <div className="hidden lg:flex items-center gap-6">
             {/* Barra de búsqueda */}
-            <div className="relative w-96">
-              <input
-                type="text"
-                placeholder="Buscar..."
-                className="w-full pl-12 pr-4 py-2.5 text-sm bg-gray-100 dark:bg-gray-800 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-              />
-              <Search className="absolute left-4 top-3 text-gray-500" size={18}/>
+            <div className="w-96">
+              <SearchBar />
             </div>
 
             {/* Selector de tema */}
