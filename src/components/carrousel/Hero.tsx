@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { getProducts } from "@/services/api/products";
-import ProductCarousel, { type CarouselProduct } from "@/components/ProductCarousel";
+import ProductCarousel, { type CarouselProduct } from "@/components/carrousel/ProductCarousel";
 
 export default function Hero() {
   const [products, setProducts] = useState<CarouselProduct[]>([]);
@@ -12,7 +12,7 @@ export default function Hero() {
     const loadProducts = async () => {
       try {
         const response = await getProducts({ size: 100 });
-        const lastThree = response.content.slice(-3).map((product) => ({
+        const lastThree = response.content.slice(-5).map((product) => ({
           id: product.id,
           name: product.name,
           price: product.price,

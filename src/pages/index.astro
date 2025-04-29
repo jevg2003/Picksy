@@ -1,6 +1,6 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import Hero from "@/components/Hero";
+import Hero from "@/components/carrousel/Hero";
 import Navbar from "@/components/Navbar.jsx";
 import Sidebar from "@/components/Sidebar.jsx";
 import Products from "@/components/products/Products.astro";
@@ -21,8 +21,8 @@ export const prerender = true;
       </aside>
 
       <div class="w-full lg:w-[85%] flex flex-col items-center">
-        <Hero client:load server:defer/>
-        <Products server:defer>
+        <Hero client:load />
+        <Products>
           <SkeletonLoaderProduct slot="fallback" />
         </Products>
       </div>
