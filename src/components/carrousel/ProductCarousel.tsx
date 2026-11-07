@@ -29,7 +29,7 @@ export default function ProductCarousel({ products }: ProductCarouselProps) {
           prevEl: ".custom-prev",
         }}
         pagination={{ clickable: true }}
-        loop={true}
+        loop={products.length > 1}
         autoplay={{ delay: 3200, disableOnInteraction: false }}
         className="rounded-lg h-[500px]">
         {products.map((product) => (
@@ -44,9 +44,11 @@ export default function ProductCarousel({ products }: ProductCarouselProps) {
             <div className="absolute bottom-0 right-0 m-4 p-6 bg-black/70 rounded-lg w-70 h-40 flex flex-col justify-center items-center">
               <h3 className="text-xl font-bold text-white">{product.name}</h3>
               <p className="text-white mt-2">Precio: ${product.price.toFixed(2)}</p>
-              <button className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
-                Saber más
-              </button>
+              <a
+                href={`#producto-${product.id}`}
+                className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                Ver ficha en el catálogo
+              </a>
             </div>
           </SwiperSlide>
         ))}

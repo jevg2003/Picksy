@@ -16,6 +16,10 @@ export interface Product {
   images: Image[];
 }
 
+export type CatalogProduct = Pick<Product, "id" | "name" | "description" | "price" | "createdAt"> & {
+  images: Pick<Image, "link" | "isCover">[];
+};
+
 export interface ProductResponse {
   content: Product[];
   page: number;
