@@ -11,11 +11,14 @@ export type QueryParams = {
   search?: string;
 };
 
-export const getProducts = async (queryParams?: QueryParams): Promise<ProductResponse> => {
+export const getProducts = async (
+  queryParams?: QueryParams,
+  signal?: AbortSignal
+): Promise<ProductResponse> => {
   const queryString = new URLSearchParams(queryParams as Record<string, string>).toString();
   const url = `/products${queryString ? `?${queryString}` : ""}`;
 
-  const data: ProductResponse = await queryApi(url, { method: "GET" });
+  const data: ProductResponse = await queryApi(url, { method: "GET", signal });
 
   return data;
 };

@@ -1,15 +1,25 @@
 ---
-// Products.astro
 import { getProducts } from "@/services/api/products";
+import type { Product } from "@/types/api/product";
 import { ProductCard } from "./ProductCard";
-const { content: products } = await getProducts({
-  size: 100,
-});
 
-// Ordenar productos por fecha de creación descendente
-const sortedProducts = [...products].sort((a, b) => 
-  new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-);
+let sortedProducts: Product[] = [];
+let catalogUnavailable = false;
+
+try {
+  const { content } = await getProducts({ size: 100 }, AbortSignal.timeout(8000));
+  if (!Array.isArray(content)) {
+    throw new Error("La API devolvió un catálogo inválido");
+  }
+
+  sortedProducts = [...content].sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  );
+} catch (error) {
+  catalogUnavailable = true;
+  Astro.response.headers.set("Cache-Control", "no-store");
+  console.error("No se pudo cargar el catálogo de Picksy", error);
+}
 
 interface Props {
   showId?: boolean;
@@ -48,7 +58,9 @@ const { showId = false } = Astro.props as Props;
               d="M9 17v-2a4 4 0 014-4h1a4 4 0 014 4v2m-7 4h6m-3-4v4m-6-4a4 4 0 00-4-4H5a4 4 0 00-4 4v2m7 4h6m-3-4v4"
             />
           </svg>
-          <p class="text-lg font-semibold">No hay productos disponibles</p>
+          <p class="text-lg font-semibold" role="status">
+            {catalogUnavailable ? "El catálogo no está disponible temporalmente" : "No hay productos disponibles"}
+          </p>
         </div>
       )
     }
