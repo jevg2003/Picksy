@@ -1,32 +1,24 @@
 import React, { useState, useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, FreeMode, Thumbs } from "swiper/modules";
+import { Navigation, Pagination, FreeMode } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import ModalProduct from "./ModalProduct";
-import type { Product } from "@/types/api/product";
+import type { CatalogProduct } from "@/types/api/product";
 
-interface ProductCardProps extends Product {
-  imageLink: string;
+interface ProductCardProps {
+  product: CatalogProduct;
   showId: boolean;
+  isDemo: boolean;
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({
-  id,
-  description,
-  price,
-  images,
-  name,
-  category,
-  stock,
-  discount,
-  characteristics,
-  enabled,
+  product,
   showId,
-  createdAt,
-  updatedAt,
+  isDemo,
 }) => {
+  const { id, description, price, images, name } = product;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const swiperRef = useRef<any>(null);
   const hasMultipleImages = images.length > 1;
@@ -41,7 +33,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
   return (
     <>
-      <div className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow hover:shadow-lg transition-transform transform hover:scale-105 cursor-pointer p-4 h-[420px] flex flex-col relative">
+      <article
+        id={`producto-${id}`}
+        className="scroll-mt-20 bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow hover:shadow-lg transition-transform transform hover:scale-105 p-4 h-[420px] flex flex-col relative">
         {showId && (
           <span className="absolute top-2 right-2 text-gray-500 dark:text-gray-400 text-sm z-10">
             {id}
@@ -98,13 +92,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                 </svg>
               </button>
             </>
-          ) : (
-            // Mostrar imagen única sin Swiper
+          ) : images[0] ? (
             <img
               src={images[0].link}
               alt={name}
               className="w-full h-full object-contain p-1 rounded"
             />
+          ) : (
+            <div className="grid h-full place-items-center text-sm text-gray-500">Sin imagen</div>
           )}
         </div>
 
@@ -120,25 +115,19 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               currency: "COP",
             }).format(price)}
           </p>
+          <button
+            type="button"
+            onClick={() => setIsModalOpen(true)}
+            className="mt-2 self-start cursor-pointer text-sm font-semibold text-blue-700 underline-offset-4 hover:underline dark:text-blue-300">
+            Ver ficha de {name}
+          </button>
         </div>
-      </div>
+      </article>
 
       {isModalOpen && (
         <ModalProduct
-          product={{
-            id,
-            description,
-            price,
-            images,
-            name,
-            category,
-            stock,
-            discount,
-            characteristics,
-            enabled,
-            createdAt,
-            updatedAt,
-          }}
+          product={product}
+          isDemo={isDemo}
           closeModal={() => setIsModalOpen(false)}
         />
       )}

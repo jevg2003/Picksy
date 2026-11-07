@@ -1,35 +1,76 @@
 ---
-// Products.astro
 import { getProducts } from "@/services/api/products";
+import { demoProducts } from "@/data/demo-products";
+import type { CatalogProduct } from "@/types/api/product";
+import Hero from "@/components/carrousel/Hero";
 import { ProductCard } from "./ProductCard";
-const { content: products } = await getProducts({
-  size: 100,
-});
-
-// Ordenar productos por fecha de creación descendente
-const sortedProducts = [...products].sort((a, b) => 
-  new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-);
 
 interface Props {
   showId?: boolean;
+  showFeatured?: boolean;
 }
 
-const { showId = false } = Astro.props as Props;
+const { showId = false, showFeatured = false } = Astro.props;
+let products: CatalogProduct[] = [];
+let catalogUnavailable = false;
+
+try {
+  const { content } = await getProducts({ size: 100 }, AbortSignal.timeout(8000));
+  if (!Array.isArray(content)) {
+    throw new Error("La API devolvió un catálogo inválido");
+  }
+
+  products = content
+    .map(({ id, name, description, price, createdAt, images }) => ({
+      id,
+      name,
+      description,
+      price,
+      createdAt,
+      images: images.map(({ link, isCover }) => ({ link, isCover })),
+    }))
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+} catch (error) {
+  catalogUnavailable = true;
+  Astro.response.headers.set("Cache-Control", "no-store");
+  console.error("No se pudo cargar el catálogo de Picksy", error);
+}
+
+const isDemo = showFeatured && catalogUnavailable;
+if (isDemo) products = demoProducts;
+
+const featured = showFeatured
+  ? products.slice(0, 3).map(({ id, name, price, images }) => ({
+      id,
+      name,
+      price,
+      img: images.find((image) => image.isCover)?.link ?? images[0]?.link ?? "",
+    })).filter((product) => product.img)
+  : [];
 ---
+
+{isDemo && (
+  <div role="status" class="mx-auto mt-5 w-[98%] rounded-xl border border-blue-200 bg-blue-50 p-4 dark:border-blue-800 dark:bg-blue-950">
+    <p class="font-semibold text-blue-950 dark:text-blue-100">Catálogo de demostración</p>
+    <p class="text-sm text-blue-900 dark:text-blue-200">
+      El catálogo en línea está temporalmente fuera de servicio. Puedes recorrer estos productos y abrir sus fichas.
+    </p>
+  </div>
+)}
+{featured.length > 0 && <Hero client:load products={featured} />}
 
 <section class="py-10 w-full">
   <div class="container mx-auto px-4">
     <h2 class="text-6xl text-start mb-20">Productos</h2>
     {
-      sortedProducts.length > 0 ? (
+      products.length > 0 ? (
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-          {sortedProducts.map((product) => (
+          {products.map((product) => (
             <ProductCard
               client:only="react"
-              {...product}
+              product={product}
               {showId}
-              imageLink={product.images.find((img) => img.isCover)?.link || ""}
+              {isDemo}
             />
           ))}
         </div>
@@ -48,7 +89,9 @@ const { showId = false } = Astro.props as Props;
               d="M9 17v-2a4 4 0 014-4h1a4 4 0 014 4v2m-7 4h6m-3-4v4m-6-4a4 4 0 00-4-4H5a4 4 0 00-4 4v2m7 4h6m-3-4v4"
             />
           </svg>
-          <p class="text-lg font-semibold">No hay productos disponibles</p>
+          <p class="text-lg font-semibold" role="status">
+            {catalogUnavailable ? "El catálogo no está disponible temporalmente" : "No hay productos disponibles"}
+          </p>
         </div>
       )
     }
